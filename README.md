@@ -15,25 +15,7 @@ To install cpdata:
 
 ``` r
 install.packages("devtools")
-#> Installing package into '/private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a653efae3'
-#> (as 'lib' is unspecified)
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T//RtmpqP1Rqr/downloaded_packages
 devtools::install_github("george-wood/cpdata")
-#> Downloading GitHub repo george-wood/cpdata@HEAD
-#> Skipping 1 packages ahead of CRAN: data.table
-#>      checking for file ‘/private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpqP1Rqr/remotes8c4a52ae2487/george-wood-cpdata-9f67248/DESCRIPTION’ ...  ✔  checking for file ‘/private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpqP1Rqr/remotes8c4a52ae2487/george-wood-cpdata-9f67248/DESCRIPTION’
-#>   ─  preparing ‘cpdata’:
-#>      checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-#>   ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>    Omitted ‘LazyData’ from DESCRIPTION
-#> ─  building ‘cpdata_0.0.0.9000.tar.gz’
-#>    
-#> 
-#> Installing package into '/private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a653efae3'
-#> (as 'lib' is unspecified)
 ```
 
 ## Example
@@ -46,7 +28,7 @@ file <- "parking_tickets.csv"
 tidy_ticket(
   system.file("extdata", file, package = "cpdata", mustWork = TRUE)
 )
-#> Finished preprocessing: /private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a653efae3/cpdata/extdata/parking_tickets.csv
+#> Finished preprocessing: /private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a22c6a3df/cpdata/extdata/parking_tickets.csv
 #>     star     ticket                  dt violation_code
 #>    <int>      <i64>              <POSc>         <char>
 #> 1: 12511   35125343 2001-03-02 18:50:00       0964100C
