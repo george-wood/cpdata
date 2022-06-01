@@ -1,0 +1,43 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# cpdata
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The functions in cpdata are customized preprocessing steps for specific
+datasets released by the Chicago Police Department.
+
+## Installation
+
+<!-- To install cpdata: -->
+
+<!-- ```{r install, include = FALSE} -->
+<!-- install.packages("devtools") -->
+<!-- devtools::install_github("george-wood/cpdata") -->
+<!-- ``` -->
+
+## Example
+
+Preprocess ticket data:
+
+```{r example}
+library(cpdata)
+file <- "parking_tickets.csv"
+tidy_ticket(
+  system.file("extdata", file, package = "cpdata", mustWork = TRUE)
+)
+```
