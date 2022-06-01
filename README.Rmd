@@ -18,17 +18,17 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The functions in cpdata are customized preprocessing steps for specific
+cpdata provides customized preprocessing steps for specific
 datasets released by the Chicago Police Department.
 
 ## Installation
 
-<!-- To install cpdata: -->
+To install cpdata:
 
-<!-- ```{r install, include = FALSE} -->
-<!-- install.packages("devtools") -->
-<!-- devtools::install_github("george-wood/cpdata") -->
-<!-- ``` -->
+```{r install, include = FALSE}
+install.packages("devtools")
+devtools::install_github("george-wood/cpdata")
+```
 
 ## Example
 

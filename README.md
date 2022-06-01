@@ -6,16 +6,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The functions in cpdata are customized preprocessing steps for specific
-datasets released by the Chicago Police Department.
+cpdata provides customized preprocessing steps for specific datasets
+released by the Chicago Police Department.
 
 ## Installation
 
-<!-- To install cpdata: -->
-<!-- ```{r install, include = FALSE} -->
-<!-- install.packages("devtools") -->
-<!-- devtools::install_github("george-wood/cpdata") -->
-<!-- ``` -->
+To install cpdata:
 
 ## Example
 
@@ -27,7 +23,7 @@ file <- "parking_tickets.csv"
 tidy_ticket(
   system.file("extdata", file, package = "cpdata", mustWork = TRUE)
 )
-#> Finished preprocessing: /private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a7c3840e/cpdata/extdata/parking_tickets.csv
+#> Finished preprocessing: /private/var/folders/qw/kjq09mn10l5cmw355f10qr2h0000gn/T/RtmpM1OQSG/temp_libpath869a76936ae9/cpdata/extdata/parking_tickets.csv
 #>     star     ticket                  dt violation_code
 #>    <int>      <i64>              <POSc>         <char>
 #> 1: 12511   35125343 2001-03-02 18:50:00       0964100C
