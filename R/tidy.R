@@ -474,7 +474,7 @@ tidy_ticket <- function(file, zip = FALSE) {
   cmd <- NULL
   if (zip) {
     file <- NULL
-    cmd  <- paste("unzip -p ", file)
+    cmd  <- paste("unzip -p", file)
   }
 
   d <- fread(
