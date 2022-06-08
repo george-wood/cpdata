@@ -252,13 +252,13 @@ tidy_contact <- function(file) {
         dt = fifelse(
           grepl(pattern = "2014|2015", date),
           as.POSIXct(
-            x      = paste(date, sprintf("%04s", time)),
-            format = "%d-%b-%y %H:%M",
+            x      = paste(date, time),
+            format = "%y-%m-%d %H:%M:%S",
             tz     = "UTC"
           ),
           as.POSIXct(
-            x      = paste(date, time),
-            format = "%y-%m-%d %H:%M:%S",
+            x      = paste(date, sprintf("%04s", time)),
+            format = "%d-%b-%y %H:%M",
             tz     = "UTC"
           )
         ),
@@ -457,8 +457,8 @@ tidy_isr <- function(file) {
 #'
 #' @param file File name in working directory or path to .csv file containing
 #' ticket data
-#' @param zip logical (default is \code{FALSE}). Is the .csv file zipped?
-#' If so, file will be unzipped prior to reading.
+#' @param zip logical (default is \code{FALSE}). Set to \code{TRUE} if the .csv
+#' file is zipped and file will be unzipped prior to reading.
 #'
 #'
 #' @return A data.table containing ticket data
