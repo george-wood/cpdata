@@ -249,9 +249,19 @@ tidy_contact <- function(file) {
     d[!is.na(dt),
       .(
         eid,
-        dt = as.POSIXct(x = paste(date, sprintf("%04s", time)),
-                        format = "%d-%b-%y %H:%M",
-                        tz = "UTC"),
+        dt = fifelse(
+          grepl(pattern = "2014|2015", date),
+          as.POSIXct(
+            x      = paste(date, sprintf("%04s", time)),
+            format = "%d-%b-%y %H:%M",
+            tz     = "UTC"
+          ),
+          as.POSIXct(
+            x      = paste(date, time),
+            format = "%y-%m-%d %H:%M:%S",
+            tz     = "UTC"
+          )
+        ),
         role,
         last_name,
         first_name,
@@ -447,6 +457,9 @@ tidy_isr <- function(file) {
 #'
 #' @param file File name in working directory or path to .csv file containing
 #' ticket data
+#' @param zip logical (default is \code{FALSE}). Is the .csv file zipped?
+#' If so, file will be unzipped prior to reading.
+#'
 #'
 #' @return A data.table containing ticket data
 #' @export

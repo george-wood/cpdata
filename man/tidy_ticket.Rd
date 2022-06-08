@@ -4,11 +4,13 @@
 \alias{tidy_ticket}
 \title{Preprocess ticket data}
 \usage{
-tidy_ticket(file)
+tidy_ticket(file, zip = FALSE)
 }
 \arguments{
 \item{file}{File name in working directory or path to .csv file containing
 ticket data}
+
+\item{zip}{logical (default is \code{FALSE}). Is the .csv file zipped?}
 }
 \value{
 A data.table containing ticket data
