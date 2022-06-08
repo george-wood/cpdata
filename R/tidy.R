@@ -238,7 +238,7 @@ tidy_contact <- function(file) {
     dcast(
       melt(
         data = unique(d)[, eid := 1:.N],
-        measure.vars = measure(officer, feature, sep = "."),
+        measure.vars = measure(role, feature, sep = "."),
         variable.factor = FALSE
       ),
       formula = ... ~ feature,
@@ -252,7 +252,7 @@ tidy_contact <- function(file) {
         dt = as.POSIXct(x = paste(date, sprintf("%04s", time)),
                         format = "%d-%b-%y %H:%M",
                         tz = "UTC"),
-        officer,
+        role,
         last_name,
         first_name,
         age,
@@ -426,7 +426,7 @@ tidy_isr <- function(file) {
     dcast(
       melt(
         data = unique(d),
-        measure.vars = measure(officer, feature, sep = "."),
+        measure.vars = measure(role, feature, sep = "."),
         variable.factor = FALSE
       ),
       formula = ... ~ feature,
