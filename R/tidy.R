@@ -246,7 +246,7 @@ tidy_contact <- function(file) {
     )
 
   d <-
-    d[!is.na(dt),
+    d[,
       .(
         eid,
         dt = fifelse(
@@ -270,7 +270,7 @@ tidy_contact <- function(file) {
         sex,
         type
       )
-    ]
+    ][!is.na(dt)]
 
   message("Finished preprocessing: ", file)
   return(d)
