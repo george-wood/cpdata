@@ -253,7 +253,7 @@ tidy_contact <- function(file) {
           grepl(pattern = "2014|2015", date),
           as.POSIXct(
             x      = paste(date, time),
-            format = "%y-%m-%d %H:%M:%S",
+            format = "%Y-%m-%d %H:%M:%S",
             tz     = "UTC"
           ),
           as.POSIXct(
