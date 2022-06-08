@@ -456,10 +456,17 @@ tidy_isr <- function(file) {
 #' tidy_ticket(
 #'   system.file("extdata", file, package = "cpdata", mustWork = TRUE)
 #' )
-tidy_ticket <- function(file) {
+tidy_ticket <- function(file, zip = FALSE) {
+
+  cmd <- NULL
+  if (zip) {
+    file <- NULL
+    cmd  <- paste("unzip -p ", file)
+  }
 
   d <- fread(
-    file,
+    file         = file,
+    cmd          = cmd,
     header       = TRUE,
     showProgress = FALSE,
     na.strings   = "",
