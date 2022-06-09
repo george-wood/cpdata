@@ -459,10 +459,10 @@ tidy_isr <- function(file) {
 #' )
 tidy_ticket <- function(file, zip = FALSE) {
 
+  fnm <- file
   cmd <- NULL
   if (zip) {
     cmd  <- paste("unzip -p ", file)
-    f    <- file
     file <- NULL
   }
 
@@ -512,7 +512,7 @@ tidy_ticket <- function(file, zip = FALSE) {
     )
   )
 
-  message("Finished preprocessing: ", f)
+  message("Finished preprocessing: ", fnm)
   return(d)
 
 }
