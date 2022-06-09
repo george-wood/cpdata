@@ -10,8 +10,8 @@ tidy_ticket(file, zip = FALSE)
 \item{file}{File name in working directory or path to .csv file containing
 ticket data}
 
-\item{zip}{logical (default is \code{FALSE}). Is the .csv file zipped?
-If so, file will be unzipped prior to reading.}
+\item{zip}{logical (default is \code{FALSE}). Set to \code{TRUE} if the .csv
+file is zipped and file will be unzipped prior to reading.}
 }
 \value{
 A data.table containing ticket data

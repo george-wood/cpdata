@@ -19,19 +19,7 @@ tidy_arrest <- function(file_report, file_officer) {
     header       = TRUE,
     showProgress = FALSE,
     na.strings   = "",
-    select       = toupper(
-      c("cb",
-        "rd",
-        "arrest date/time",
-        "role",
-        "po first name",
-        "po last name",
-        "arrestee race",
-        "arrestee gender",
-        "arrestee age",
-        "statute",
-        "charge type")
-    ),
+    select       = c(7, 8, 9, 6, 1, 3, 10, 12, 11, 13, 14),
     col.names    = c(
       "eid",
       "rd",
@@ -70,7 +58,7 @@ tidy_arrest <- function(file_report, file_officer) {
   join_on <- c("eid", "dt", "first_name", "last_name", "role")
   d <- unique(b)[unique(a), on = join_on]
 
-  message("Finished preprocessing: ", file_report, "& ", file_officer)
+  message("Finished preprocessing: ", file_report, " & ", file_officer)
   return(d)
 
 }
@@ -474,6 +462,7 @@ tidy_ticket <- function(file, zip = FALSE) {
   cmd <- NULL
   if (zip) {
     cmd  <- paste("unzip -p ", file)
+    f    <- file
     file <- NULL
   }
 
@@ -523,7 +512,7 @@ tidy_ticket <- function(file, zip = FALSE) {
     )
   )
 
-  message("Finished preprocessing: ", file)
+  message("Finished preprocessing: ", f)
   return(d)
 
 }
