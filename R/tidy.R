@@ -58,6 +58,11 @@ tidy_arrest <- function(file_report, file_officer) {
   join_on <- c("eid", "dt", "first_name", "last_name", "role")
   d <- unique(b)[unique(a), on = join_on]
 
+  d[, `:=`(
+    civilian_race   = recode(civilian_race),
+    civilian_gender = recode(civilian_gender, feature = "gender")
+  )]
+
   message("Finished preprocessing: ", file_report, " & ", file_officer)
   return(d)
 
@@ -146,8 +151,8 @@ tidy_assignment <- function(file) {
         initial,
         rank,
         star,
-        gender,
-        race,
+        gender   = recode(gender, feature = "gender"),
+        race     = recode(race),
         birth,
         appointed,
         present_for_duty,
@@ -216,8 +221,8 @@ tidy_contact <- function(file) {
       "second.last_name",
       "second.first_name",
       "second.age",
-      "race",
-      "sex",
+      "civilian_race",
+      "civilian_gender",
       "type"
     )
   )
@@ -254,8 +259,8 @@ tidy_contact <- function(file) {
         last_name,
         first_name,
         age,
-        race,
-        sex,
+        civilian_race   = recode(civilian_race),
+        civilian_gender = recode(civilian_gender, feature = "gender"),
         type
       )
     ][!is.na(dt)]
@@ -333,8 +338,8 @@ tidy_force <- function(file_report, file_action) {
         first_name       = pofirst,
         appointed,
         civilian_injured = subject_injured,
-        civilian_race    = subrace,
-        civilian_gender  = subgndr
+        civilian_race    = recode(subrace),
+        civilian_gender  = recode(subgndr, feature = "gender")
       )
     ][]
 
@@ -397,6 +402,7 @@ tidy_isr <- function(file) {
         "so_first",
         "so_appointed_date",
         "so_birth_yr",
+        "age",
         "race",
         "sex_code_cd",
         "enforcement_action_taken_i",
@@ -418,8 +424,9 @@ tidy_isr <- function(file) {
       "second.first_name",
       "second.appointed",
       "second.birth",
-      "race",
-      "gender",
+      "civilian_age",
+      "civilian_race",
+      "civilian_gender",
       "enforcement",
       "other_reasonable_suspicion",
       "suspect_narcotic_activity",
@@ -441,7 +448,11 @@ tidy_isr <- function(file) {
       value.var = "value"
     )
 
-  d[, dt := as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "UTC")][]
+  d[, `:=`(
+    dt              = as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "UTC"),
+    civilian_race   = recode(civilian_race),
+    civilian_gender = recode(civilian_gender, feature = "gender")
+  )]
 
   message("Finished preprocessing: ", file)
   return(d)
