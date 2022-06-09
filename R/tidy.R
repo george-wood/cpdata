@@ -303,7 +303,7 @@ tidy_force <- function(file_report, file_action) {
     col.names    = tolower
   )
 
-  if (any(grepl(pattern = "datetime", colnames(d)))) {
+  if (any(grepl(pattern = "datetime", colnames(a)))) {
     a[, dt := as.POSIXct(datetime,
                          format = "%Y-%b-%d %H%M",
                          tz = "UTC")][]
@@ -351,7 +351,7 @@ tidy_force <- function(file_report, file_action) {
 
   d <- unique(b[a, on = "eid"])
 
-  message("Finished preprocessing: ", file_report, "& ", file_action)
+  message("Finished preprocessing: ", file_report, " & ", file_action)
   return(d)
 
 }
