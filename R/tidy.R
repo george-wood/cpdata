@@ -304,13 +304,23 @@ tidy_force <- function(file_report, file_action) {
   )
 
   if (any(grepl(pattern = "datetime", colnames(a)))) {
-    a[, dt := as.POSIXct(datetime,
-                         format = "%Y-%b-%d %H%M",
-                         tz = "UTC")][]
+    a[, `:=`(
+      dt        = as.POSIXct(datetime,
+                             format = "%Y-%b-%d %H%M",
+                             tz = "UTC"),
+      appointed = as.POSIXct(appointed_date,
+                             format = "%Y-%b-%d",
+                             tz = "UTC")
+    )]
   } else {
-    a[, dt := as.POSIXct(paste(dte, sprintf("%04s", tmemil)),
-                         format = "%Y-%m-%d %H%M",
-                         tz = "UTC")][]
+    a[, `:=`(
+      dt        = as.POSIXct(paste(dte, sprintf("%04s", tmemil)),
+                             format = "%Y-%m-%d %H%M",
+                             tz = "UTC"),
+      appointed = as.POSIXct(appointed_date,
+                             format = "%Y-%m-%d",
+                             tz = "UTC")
+    )]
   }
 
   a <-
@@ -321,7 +331,7 @@ tidy_force <- function(file_report, file_action) {
         on_duty          = dutystatus,
         last_name        = polast,
         first_name       = pofirst,
-        appointed        = appointed_date,
+        appointed,
         civilian_injured = subject_injured,
         civilian_race    = subrace,
         civilian_gender  = subgndr
