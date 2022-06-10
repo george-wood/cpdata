@@ -59,7 +59,7 @@ tidy_arrest <- function(file_report, file_officer) {
   d <- unique(b)[unique(a), on = join_on]
 
   d[, `:=`(
-    civilian_race   = recode(civilian_race, type = "race")
+    civilian_race   = recode(civilian_race, type = "race"),
     civilian_gender = recode(civilian_gender, type = "gender")
   )]
 
