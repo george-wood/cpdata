@@ -59,8 +59,8 @@ tidy_arrest <- function(file_report, file_officer) {
   d <- unique(b)[unique(a), on = join_on]
 
   d[, `:=`(
-    civilian_race   = recode(civilian_race),
-    civilian_gender = recode(civilian_gender, feature = "gender")
+    civilian_race   = recode(civilian_race, type = "race")
+    civilian_gender = recode(civilian_gender, type = "gender")
   )]
 
   message("Finished preprocessing: ", file_report, " & ", file_officer)
@@ -151,8 +151,8 @@ tidy_assignment <- function(file) {
         initial,
         rank,
         star,
-        gender   = recode(gender, feature = "gender"),
-        race     = recode(race),
+        gender   = recode(gender, type = "gender"),
+        race     = recode(race, type = "race"),
         birth,
         appointed,
         present_for_duty,
@@ -259,8 +259,8 @@ tidy_contact <- function(file) {
         last_name,
         first_name,
         age,
-        civilian_race   = recode(civilian_race),
-        civilian_gender = recode(civilian_gender, feature = "gender"),
+        civilian_race   = recode(civilian_race, type = "race"),
+        civilian_gender = recode(civilian_gender, type = "gender"),
         type
       )
     ][!is.na(dt)]
@@ -338,8 +338,8 @@ tidy_force <- function(file_report, file_action) {
         first_name       = pofirst,
         appointed,
         civilian_injured = subject_injured,
-        civilian_race    = recode(subrace),
-        civilian_gender  = recode(subgndr, feature = "gender")
+        civilian_race    = recode(subrace, type = "race"),
+        civilian_gender  = recode(subgndr, type = "gender")
       )
     ][]
 
@@ -450,8 +450,8 @@ tidy_isr <- function(file) {
 
   d[, `:=`(
     dt              = as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "UTC"),
-    civilian_race   = recode(civilian_race),
-    civilian_gender = recode(civilian_gender, feature = "gender")
+    civilian_race   = recode(civilian_race, type = "race"),
+    civilian_gender = recode(civilian_gender, type = "gender")
   )]
 
   message("Finished preprocessing: ", file)
