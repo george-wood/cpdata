@@ -4,12 +4,12 @@
 \alias{recode}
 \title{Recode race and ethnicity or gender feature}
 \usage{
-recode(x, feature = "race")
+recode(x, type = NULL)
 }
 \arguments{
 \item{x}{Vector of race and ethnicity or gender values}
 
-\item{feature}{Name of feature; currently accepts "race" or "gender"}
+\item{type}{Type of feature; currently accepts "race" or "gender"}
 }
 \value{
 Consistent values of race and ethnicity or gender feature
@@ -19,5 +19,5 @@ Recode race and ethnicity or gender feature
 }
 \examples{
 x <- c("M")
-recode(x, feature = "gender")
+recode(x, type = "gender")
 }

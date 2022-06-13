@@ -7,11 +7,11 @@
 tidy_arrest(file_report, file_officer)
 }
 \arguments{
-\item{file_report}{File name in working directory or path to .csv file
-containing primary arrest data, e.g. date, time, civilian attributes}
+\item{file_report}{A vector of file names in working directory or path
+to .csv files containing primary arrest data, e.g. FOIA p701162}
 
-\item{file_officer}{File name in working directory or path to .csv file
-containing corresponding officer data, e.g. appointed date}
+\item{file_officer}{A vector of file names in working directory or path
+to .csv file containing corresponding officer data, e.g. FOIA p708085}
 }
 \value{
 A data.table containing joined arrest data

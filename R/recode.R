@@ -62,7 +62,6 @@ recode <- function(x, type = NULL) {
 
         default = NA
       )
-
   }
 
   return(x)
