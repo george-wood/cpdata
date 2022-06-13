@@ -160,7 +160,7 @@ tidy_assignment <- function(file) {
   d <-
     d[,
       .(
-        oid,
+        oid      = as.character(oid),
         dt_start = as.POSIXct(
           x      = paste(date, sprintf("%04s", start)),
           format = "%d-%b-%Y %H%M",
@@ -180,10 +180,10 @@ tidy_assignment <- function(file) {
         initial,
         rank,
         star,
-        gender   = recode(gender, type = "gender"),
-        race     = recode(race, type = "race"),
+        gender    = recode(gender, type = "gender"),
+        race      = recode(race, type = "race"),
         birth,
-        appointed,
+        appointed = fasttime::fastDate(appointed),
         present_for_duty,
         absence_code,
         absence
@@ -436,7 +436,12 @@ tidy_force <- function(file_report, file_action) {
 
   d <- unique(b)[unique(a), on = "eid"][!is.na(dt)]
 
-  message("Finished preprocessing: ", file_report, " & ", file_action)
+  message(
+    "Finished preprocessing: ",
+    paste(file_report, collapse = ", "),
+    " & ",
+    paste(file_action, collapse = ", ")
+  )
   return(d)
 
 }
@@ -527,6 +532,7 @@ tidy_isr <- function(file) {
 
   d[, `:=`(
     dt              = as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "GMT"),
+    appointed       = fasttime::fastDate(appointed),
     civilian_race   = recode(civilian_race,   type = "race"),
     civilian_gender = recode(civilian_gender, type = "gender"),
     birth           = as.integer(birth)
