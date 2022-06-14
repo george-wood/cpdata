@@ -160,7 +160,6 @@ tidy_assignment <- function(file) {
   d <-
     d[,
       .(
-        aid      = 1:.N,
         oid      = as.character(oid),
         dt_start = as.POSIXct(
           x      = paste(date, sprintf("%04s", start)),
