@@ -7,8 +7,8 @@
 tidy_contact(file)
 }
 \arguments{
-\item{file}{File name in working directory or path to .csv file containing
-contact card data}
+\item{file}{A vector of file names in working directory or path
+to .csv files containing contact card data}
 }
 \value{
 A data.table containing contact card data

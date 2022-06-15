@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-cpdata provides customized preprocessing steps for specific
+cpdata provides customized preprocessing steps for several
 datasets released by the Chicago Police Department.
 
 ## Installation
@@ -32,7 +32,7 @@ devtools::install_github("george-wood/cpdata")
 
 ## Example
 
-Preprocess ticket data:
+Preprocess parking ticket data:
 
 ```{r example}
 library(cpdata)

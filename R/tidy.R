@@ -80,14 +80,13 @@ tidy_arrest <- function(file_report, file_officer) {
 
   b[, `:=`(
     dt        = as.POSIXct(dt, format = "%d-%b-%Y %H:%M", tz = "GMT"),
-    appointed = as.POSIXct(appointed, format = "%Y-%m-%d", tz = "GMT")
+    appointed = fasttime::fastDate(appointed)
   )]
 
   # join and return
   join_on <- intersect(colnames(a), colnames(b))
   d <- unique(b[eid != "J"])[unique(a[eid != "J"]), on = join_on]
 
-  message("Finished preprocessing: ", file_report, " & ", file_officer)
   return(d)
 
 }
@@ -97,8 +96,8 @@ tidy_arrest <- function(file_report, file_officer) {
 #'
 #' @import data.table
 #'
-#' @param file File name in working directory or path to .csv file containing
-#' assignment and attendance data
+#' @param file A vector of file names in working directory or path
+#' to .csv files containing assignment and attendance data
 #'
 #' @return A data.table containing assignment data
 #' @export
@@ -107,49 +106,56 @@ tidy_arrest <- function(file_report, file_officer) {
 #'
 tidy_assignment <- function(file) {
 
-  d <- fread(
-    file         = file,
-    header       = TRUE,
-    showProgress = FALSE,
-    na.strings   = "",
-    colClasses = list(
-      character = c(1:5, 8:14, 16, 18:21),
-      numeric   = c(6, 7, 15),
-      logical   = c(17)
-    ),
-    col.names    = c(
-      "date",
-      "unit",
-      "watch",
-      "beat",
-      "car",
-      "start",
-      "end",
-      "last_name",
-      "first_name",
-      "initial",
-      "rank",
-      "star",
-      "gender",
-      "race",
-      "birth",
-      "appointed",
-      "present_for_duty",
-      "absence_code",
-      "absence",
-      "modified_by_last",
-      "modified_by_first",
-      "modified_date"
-    ),
-    key          = c(
-      "last_name",
-      "first_name",
-      "appointed",
-      "birth",
-      "date",
-      "start"
+  d <-
+    rbindlist(
+      lapply(
+        file,
+        \(x)
+        fread(
+          file         = x,
+          header       = TRUE,
+          showProgress = FALSE,
+          na.strings   = "",
+          colClasses   = list(
+            character = c(1:5, 8:14, 16, 18:21),
+            numeric   = c(6, 7, 15),
+            logical   = c(17)
+          ),
+          col.names    = c(
+            "date",
+            "unit",
+            "watch",
+            "beat",
+            "car",
+            "start",
+            "end",
+            "last_name",
+            "first_name",
+            "initial",
+            "rank",
+            "star",
+            "gender",
+            "race",
+            "birth",
+            "appointed",
+            "present_for_duty",
+            "absence_code",
+            "absence",
+            "modified_by_last",
+            "modified_by_first",
+            "modified_date"
+          )
+        )
+      )
     )
-  )
+
+  setkey(d,
+         "last_name",
+         "first_name",
+         "appointed",
+         "birth",
+         "date",
+         "start")
 
   d <- d[
     d[, .I[which.max(modified_date)], by = eval(key(d))]$V1
@@ -160,6 +166,7 @@ tidy_assignment <- function(file) {
   d <-
     d[,
       .(
+        aid      = as.character(1:.N),
         oid      = as.character(oid),
         dt_start = as.POSIXct(
           x      = paste(date, sprintf("%04s", start)),
@@ -192,7 +199,6 @@ tidy_assignment <- function(file) {
 
   d <- d[!is.na(dt_start) & !is.na(dt_end)]
 
-  message("Finished preprocessing: ", file)
   return(d)
 
 }
@@ -202,8 +208,8 @@ tidy_assignment <- function(file) {
 #'
 #' @import data.table
 #'
-#' @param file File name in working directory or path to .csv file containing
-#' contact card data
+#' @param file A vector of file names in working directory or path
+#' to .csv files containing contact card data
 #'
 #' @return A data.table containing contact card data
 #' @export
@@ -212,56 +218,64 @@ tidy_assignment <- function(file) {
 #'
 tidy_contact <- function(file) {
 
-  d <- fread(
-    file,
-    header       = TRUE,
-    showProgress = FALSE,
-    na.strings   = "",
-    select       = list(
-      character = c(
-        "Contact Date",
-        "DATE",
-        "Time of Stop",
-        "TIME",
-        "FirstPOLN",
-        "1st P.O. LAST NAME",
-        "FirstPOFN",
-        "1st P.O. FIRST NAME",
-        "SecPOLN",
-        "2nd P.O. LAST NAME",
-        "SecPOFN",
-        "2nd P.O.FIRST NAME",
-        "SubRace",
-        "SUBJECT RACE",
-        "SubSex",
-        "SUBJECT SEX",
-        "Contact Type",
-        "CONTACT TYPE DESCRIPTION"
-      ),
-      numeric   = c(
-        "FirstPOAge (on date of stop)",
-        "1st P.O. AGE",
-        "SecPOAge (on date of stop)",
-        "2nd P.O. AGE",
-        "SubAge",
-        "SUBJECT AGE"
+  d <-
+    rbindlist(
+      lapply(
+        file,
+        \(x)
+        fread(
+          file         = x,
+          header       = TRUE,
+          showProgress = FALSE,
+          na.strings   = "",
+          select       = list(
+            character = c(
+              "Contact Date",
+              "DATE",
+              "Time of Stop",
+              "TIME",
+              "FirstPOLN",
+              "1st P.O. LAST NAME",
+              "FirstPOFN",
+              "1st P.O. FIRST NAME",
+              "SecPOLN",
+              "2nd P.O. LAST NAME",
+              "SecPOFN",
+              "2nd P.O.FIRST NAME",
+              "SubRace",
+              "SUBJECT RACE",
+              "SubSex",
+              "SUBJECT SEX",
+              "Contact Type",
+              "CONTACT TYPE DESCRIPTION"
+            ),
+            numeric   = c(
+              "FirstPOAge (on date of stop)",
+              "1st P.O. AGE",
+              "SecPOAge (on date of stop)",
+              "2nd P.O. AGE",
+              "SubAge",
+              "SUBJECT AGE"
+            )
+          ),
+          col.names    = c(
+            "date",
+            "time",
+            "first.last_name",
+            "first.first_name",
+            "second.last_name",
+            "second.first_name",
+            "civilian_race",
+            "civilian_gender",
+            "type",
+            "first.age",
+            "second.age",
+            "civilian_age"
+          )
+        )
       )
-    ),
-    col.names    = c(
-      "date",
-      "time",
-      "first.last_name",
-      "first.first_name",
-      "second.last_name",
-      "second.first_name",
-      "civilian_race",
-      "civilian_gender",
-      "type",
-      "first.age",
-      "second.age",
-      "civilian_age"
     )
-  )
+
 
   d <-
     dcast(
@@ -283,26 +297,25 @@ tidy_contact <- function(file) {
           as.POSIXct(
             x      = paste(date, time),
             format = "%Y-%m-%d %H:%M:%S",
-            tz     = "UTC"
+            tz     = "GMT"
           ),
           as.POSIXct(
             x      = paste(date, sprintf("%04s", time)),
             format = "%d-%b-%y %H:%M",
-            tz     = "UTC"
+            tz     = "GMT"
           )
         ),
         role,
         last_name,
         first_name,
-        age             = as.integer(age),
+        age             = utils::type.convert(age, as.is = TRUE),
         civilian_race   = recode(civilian_race, type = "race"),
         civilian_gender = recode(civilian_gender, type = "gender"),
-        civilian_age    = as.integer(civilian_age),
+        civilian_age    = utils::type.convert(civilian_age, as.is = TRUE),
         type
       )
     ][!is.na(dt)]
 
-  message("Finished preprocessing: ", file)
   return(d)
 
 }
@@ -394,11 +407,11 @@ tidy_force <- function(file_report, file_action) {
             uniform          = member_in_uniform,
             last_name        = polast,
             first_name       = pofirst,
-            appointed,
+            appointed        = fasttime::fastDate(appointed),
             civilian_injured = subject_injured,
             civilian_race    = recode(subrace, type = "race"),
             civilian_gender  = recode(subgndr, type = "gender"),
-            civilian_birth   = as.integer(subyeardob)
+            civilian_birth   = utils::type.convert(subyeardob, as.is = TRUE)
           )
         ]
       )
@@ -436,12 +449,6 @@ tidy_force <- function(file_report, file_action) {
 
   d <- unique(b)[unique(a), on = "eid"][!is.na(dt)]
 
-  message(
-    "Finished preprocessing: ",
-    paste(file_report, collapse = ", "),
-    " & ",
-    paste(file_action, collapse = ", ")
-  )
   return(d)
 
 }
@@ -535,10 +542,9 @@ tidy_isr <- function(file) {
     appointed       = fasttime::fastDate(appointed),
     civilian_race   = recode(civilian_race,   type = "race"),
     civilian_gender = recode(civilian_gender, type = "gender"),
-    birth           = as.integer(birth)
+    birth           = utils::type.convert(birth, as.is = TRUE)
   )]
 
-  message("Finished preprocessing: ", file)
   return(d)
 
 }
@@ -589,21 +595,21 @@ tidy_ticket <- function(file, zip = FALSE) {
         "unit",
         "ticket_queue",
         "ticket_queue_date",
-        "hearing_disposition"
+        "hearing_disposition",
+        "geocoded_lng",
+        "geocoded_lat",
+        "geocode_accuracy"
       ),
       numeric   = c(
         "fine_level1_amount",
         "fine_level2_amount",
         "current_amount_due",
-        "total_payments",
-        "geocoded_lng",
-        "geocoded_lat",
-        "geocode_accuracy"
+        "total_payments"
       )
     ),
     col.names    = c(
       "star",
-      "ticket",
+      "eid",
       "dt",
       "violation_code",
       "violation",
@@ -612,13 +618,13 @@ tidy_ticket <- function(file, zip = FALSE) {
       "queue",
       "queue_date",
       "disposition",
+      "longitude",
+      "latitude",
+      "accuracy",
       "fine_1",
       "fine_2",
       "current_amount_due",
-      "total_payments",
-      "longitude",
-      "latitude",
-      "accuracy"
+      "total_payments"
     )
   )
 
@@ -626,10 +632,12 @@ tidy_ticket <- function(file, zip = FALSE) {
     dt          = fasttime::fastPOSIXct(dt, tz = "GMT"),
     queue_date  = fasttime::fastPOSIXct(queue_date, tz = "GMT"),
     disposition = fifelse(disposition == "", NA, disposition),
-    unit        = fifelse(unit == "NULL", NA, unit)
-  )]
+    unit        = fifelse(unit == "NULL", NA, unit),
+    longitude   = utils::type.convert(longitude, as.is = TRUE),
+    latitude    = utils::type.convert(latitude,  as.is = TRUE),
+    accuracy    = utils::type.convert(accuracy,  as.is = TRUE)
+  )][]
 
-  message("Finished preprocessing: ", fnm)
   return(d)
 
 }

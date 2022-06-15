@@ -7,8 +7,8 @@
 tidy_assignment(file)
 }
 \arguments{
-\item{file}{File name in working directory or path to .csv file containing
-assignment and attendance data}
+\item{file}{A vector of file names in working directory or path
+to .csv files containing assignment and attendance data}
 }
 \value{
 A data.table containing assignment data
