@@ -343,10 +343,12 @@ tidy_force <- function(file_report, file_action) {
       \(x)
       fread(
         x,
-        header       = TRUE,
-        showProgress = FALSE,
-        na.strings   = "",
-        select       = list(
+        header           = TRUE,
+        showProgress     = FALSE,
+        na.strings       = "",
+        blank.lines.skip = TRUE,
+        col.names        = tolower,
+        select           = list(
           character = c(
             "TRR_REPORT_ID",
             "DTE",
@@ -356,66 +358,68 @@ tidy_force <- function(file_report, file_action) {
             "POFIRST",
             "APPOINTED_DATE",
             "SUBRACE",
-            "SUBGNDR",
+            "SUBGNDR"
+          ),
+          numeric  = c(
+            "POAGE",
+            "POYRofBIRTH",
             "SUBYEARDOB"
           ),
-          logical   = c(
+          logical  = c(
             "MEMBER_IN_UNIFORM",
             "DUTYSTATUS",
             "SUBJECT_INJURED"
           )
-        ),
-        col.names    = tolower
+        )
       )
     )
 
   a <-
-    lapply(
-      a,
-      \(x)
-      if (any(grepl(pattern = "datetime", colnames(x)))) {
-        x[, `:=`(
-          dt        = as.POSIXct(datetime,
-                                 format = "%Y-%b-%d %H%M",
-                                 tz = "GMT"),
-          appointed = as.POSIXct(appointed_date,
-                                 format = "%Y-%b-%d",
-                                 tz = "GMT")
-        )]
-      } else {
-        x[, `:=`(
-          dt        = as.POSIXct(paste(dte, sprintf("%04s", tmemil)),
-                                 format = "%Y-%m-%d %H%M",
-                                 tz = "GMT"),
-          appointed = as.POSIXct(appointed_date,
-                                 format = "%Y-%m-%d",
-                                 tz = "GMT")
-        )]
-      }
-    )
-
-  a <-
-    rbindlist(
-      lapply(
-        a,
-        \(x)
-        x[,
-          .(
-            eid              = trr_report_id,
-            dt,
-            on_duty          = dutystatus,
-            uniform          = member_in_uniform,
-            last_name        = polast,
-            first_name       = pofirst,
-            appointed        = fasttime::fastDate(appointed),
-            civilian_injured = subject_injured,
-            civilian_race    = recode(subrace, type = "race"),
-            civilian_gender  = recode(subgndr, type = "gender"),
-            civilian_birth   = utils::type.convert(subyeardob, as.is = TRUE)
-          )
-        ]
+    rbindlist(a, fill = TRUE)[
+      , dt := fifelse(is.na(dte), NA, paste(dte, sprintf("%04s", tmemil)))
+    ][, `:=`(
+      dt = fcase(
+        nchar(dt) == 15,
+        as.POSIXct(dt,       format = "%Y-%m-%d %H%M", tz = "GMT"),
+        nchar(dt) <= 14,
+        as.POSIXct(dt,       format = "%m/%d/%y %H%M", tz = "GMT"),
+        is.na(dt),
+        as.POSIXct(datetime, format = "%Y-%b-%d %H%M", tz = "GMT")
+      ),
+      appointed = fcase(
+        nchar(appointed_date) == 11,
+        as.POSIXct(appointed_date, format = "%Y-%b-%d", tz = "GMT"),
+        nchar(appointed_date) == 10,
+        as.POSIXct(appointed_date, format = "%Y-%m-%d", tz = "GMT"),
+        nchar(appointed_date) <= 9,
+        as.POSIXct(appointed_date, format = "%m/%d/%y", tz = "GMT")
       )
     )
+    ][, `:=`(
+      birth_upper = fifelse(
+        is.na(poage), poyrofbirth, year(dt) - poage
+      ),
+      birth_lower = fifelse(
+        is.na(poage), poyrofbirth, year(dt) - poage - 1
+      )
+    )
+    ][,
+      .(
+        eid              = trr_report_id,
+        dt,
+        on_duty          = dutystatus,
+        uniform          = member_in_uniform,
+        last_name        = polast,
+        first_name       = pofirst,
+        appointed        = fasttime::fastDate(appointed),
+        birth_lower,
+        birth_upper,
+        civilian_injured = subject_injured,
+        civilian_race    = recode(subrace, type = "race"),
+        civilian_gender  = recode(subgndr, type = "gender"),
+        civilian_birth   = utils::type.convert(subyeardob, as.is = TRUE)
+      )
+    ]
 
   b <-
     rbindlist(
@@ -439,13 +443,14 @@ tidy_force <- function(file_report, file_action) {
       )
     )
 
-  b <- b[person == "Member Action"][
-    ,
-    .(
-      eid = trr_report_id,
-      action
-    )
-  ]
+  b <-
+    b[person == "Member Action"][
+      ,
+      .(
+        eid = trr_report_id,
+        action
+      )
+    ]
 
   d <- unique(b)[unique(a), on = "eid"][!is.na(dt)]
 
@@ -544,6 +549,8 @@ tidy_isr <- function(file) {
     civilian_gender = recode(civilian_gender, type = "gender"),
     birth           = utils::type.convert(birth, as.is = TRUE)
   )]
+
+  d <- d[!is.na(last_name)]
 
   return(d)
 
