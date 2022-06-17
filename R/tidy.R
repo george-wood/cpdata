@@ -314,6 +314,10 @@ tidy_contact <- function(file) {
         civilian_age    = utils::type.convert(civilian_age, as.is = TRUE),
         type
       )
+    ][, `:=`(
+        birth_upper = year(dt) - age,
+        birth_lower = year(dt) - age - 1
+      )
     ][!is.na(dt)]
 
   return(d)
