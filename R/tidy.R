@@ -198,6 +198,7 @@ tidy_assignment <- function(file) {
     ]
 
   d <- d[!is.na(dt_start) & !is.na(dt_end)]
+  d[, dt_end := fifelse(dt_end < dt_start, dt_end + (1*60*60*24), dt_end)][]
 
   return(d)
 
