@@ -25,7 +25,7 @@ tidy_arrest <- function(file_report, file_officer) {
           showProgress = FALSE,
           na.strings   = "",
           select       = list(
-            character = c(7, 8, 9, 6, 1, 3, 10, 12, 13, 14),
+            character = c(7, 8, 9, 6, 1, 2, 3, 10, 12, 13, 14),
             numeric   = c(11)
           ),
           col.names    = c(
@@ -34,6 +34,7 @@ tidy_arrest <- function(file_report, file_officer) {
             "dt",
             "role",
             "first_name",
+            "initial",
             "last_name",
             "civilian_race",
             "civilian_gender",
