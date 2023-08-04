@@ -22,28 +22,22 @@ recode <- function(x, type = NULL) {
   if (type == "race") {
     x <-
       data.table::fcase(
-
         x %in% c("asian/pacific islander",
                  "asian / pacific islander",
                  "native hawaiian or other pacific islander"),
         "asian_pacific_islander",
-
         x %in% c("black",
                  "black hispanic"),
         "black",
-
         x %in% c("hispanic",
                  "white hispanic",
                  "spanish (do not use)"),
         "hispanic",
-
         x %in% c("amer ind/alaskan native",
                  "amer indian / alaskan native"),
         "indigenous",
-
         x %in% c("white"),
         "white",
-
         default = NA
       )
   }
@@ -51,15 +45,12 @@ recode <- function(x, type = NULL) {
   if (type == "gender") {
     x <-
       data.table::fcase(
-
         x %in% c("female",
                  "f"),
         "female",
-
         x %in% c("male",
                  "m"),
         "male",
-
         default = NA
       )
   }
