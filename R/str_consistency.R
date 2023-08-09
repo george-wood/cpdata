@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' x <- c("M")
-#' str_consistency(x, type = "gender")
+#' str_consistency(x, feature = "gender")
 str_consistency <- function(x, feature = NULL) {
 
   if (is.null(feature)) {
