@@ -83,8 +83,8 @@ tidy_isr <- function(file) {
   d[, `:=`(
     dt              = as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "GMT"),
     appointed       = fasttime::fastDate(appointed),
-    civilian_race   = str_consistency(civilian_race,   type = "race"),
-    civilian_gender = str_consistency(civilian_gender, type = "gender"),
+    civilian_race   = str_consistency(civilian_race,   feature = "race"),
+    civilian_gender = str_consistency(civilian_gender, feature = "gender"),
     birth           = utils::type.convert(birth, as.is = TRUE)
   )]
 

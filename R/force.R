@@ -92,8 +92,8 @@ tidy_force <- function(file_report, file_action) {
         birth_lower,
         birth_upper,
         civilian_injured = subject_injured,
-        civilian_race    = str_consistency(subrace, type = "race"),
-        civilian_gender  = str_consistency(subgndr, type = "gender"),
+        civilian_race    = str_consistency(subrace, feature = "race"),
+        civilian_gender  = str_consistency(subgndr, feature = "gender"),
         civilian_birth   = utils::type.convert(subyeardob, as.is = TRUE)
       )
     ]

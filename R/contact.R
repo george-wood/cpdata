@@ -103,8 +103,8 @@ tidy_contact <- function(file) {
         last_name,
         first_name,
         age             = utils::type.convert(age, as.is = TRUE),
-        civilian_race   = str_consistency(civilian_race, type = "race"),
-        civilian_gender = str_consistency(civilian_gender, type = "gender"),
+        civilian_race   = str_consistency(civilian_race, feature = "race"),
+        civilian_gender = str_consistency(civilian_gender, feature = "gender"),
         civilian_age    = utils::type.convert(civilian_age, as.is = TRUE),
         type
       )
