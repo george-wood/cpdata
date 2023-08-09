@@ -13,7 +13,7 @@
 #' @examples
 #'
 tidy_force <- function(file_report, file_action) {
-  
+
   a <-
     lapply(
       file_report,
@@ -50,7 +50,7 @@ tidy_force <- function(file_report, file_action) {
         )
       )
     )
-  
+
   a <-
     rbindlist(a, fill = TRUE)[
       , dt := fifelse(is.na(dte), NA, paste(dte, sprintf("%04s", tmemil)))
@@ -92,12 +92,12 @@ tidy_force <- function(file_report, file_action) {
         birth_lower,
         birth_upper,
         civilian_injured = subject_injured,
-        civilian_race    = recode(subrace, type = "race"),
-        civilian_gender  = recode(subgndr, type = "gender"),
+        civilian_race    = str_consistency(subrace, type = "race"),
+        civilian_gender  = str_consistency(subgndr, type = "gender"),
         civilian_birth   = utils::type.convert(subyeardob, as.is = TRUE)
       )
     ]
-  
+
   b <-
     rbindlist(
       lapply(
@@ -119,7 +119,7 @@ tidy_force <- function(file_report, file_action) {
         )
       )
     )
-  
+
   b <-
     b[person == "Member Action"][
       ,
@@ -128,9 +128,9 @@ tidy_force <- function(file_report, file_action) {
         action
       )
     ]
-  
+
   d <- unique(b)[unique(a), on = "eid"][!is.na(dt)]
-  
+
   return(d)
-  
+
 }

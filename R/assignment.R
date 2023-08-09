@@ -11,7 +11,7 @@
 #' @examples
 #'
 tidy_assignment <- function(file) {
-  
+
   d <-
     rbindlist(
       lapply(
@@ -54,7 +54,7 @@ tidy_assignment <- function(file) {
         )
       )
     )
-  
+
   setkey(
     d,
     "last_name",
@@ -64,13 +64,13 @@ tidy_assignment <- function(file) {
     "date",
     "start"
   )
-  
+
   d <- d[
     d[, .I[which.max(modified_date)], by = eval(key(d))]$V1
   ]
-  
+
   d[, oid := .GRP, by = setdiff(key(d), c("date", "start"))]
-  
+
   d <-
     d[,
       .(
@@ -95,8 +95,8 @@ tidy_assignment <- function(file) {
         initial,
         rank,
         star,
-        gender    = recode(gender, type = "gender"),
-        race      = recode(race, type = "race"),
+        gender    = str_consistency(gender, type = "gender"),
+        race      = str_consistency(race, type = "race"),
         birth,
         appointed = fasttime::fastDate(appointed),
         present_for_duty,
@@ -104,11 +104,11 @@ tidy_assignment <- function(file) {
         absence
       )
     ]
-  
+
   d <- d[!is.na(dt_start) & !is.na(dt_end)]
   d[, dt_end := fifelse(dt_end < dt_start, dt_end + (1*60*60*24), dt_end)][]
-  
+
   return(d)
-  
+
 }
 

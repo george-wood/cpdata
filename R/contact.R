@@ -11,7 +11,7 @@
 #' @examples
 #'
 tidy_contact <- function(file) {
-  
+
   d <-
     rbindlist(
       lapply(
@@ -69,8 +69,8 @@ tidy_contact <- function(file) {
         )
       )
     )
-  
-  
+
+
   d <-
     dcast(
       melt(
@@ -81,7 +81,7 @@ tidy_contact <- function(file) {
       formula = ... ~ feature,
       value.var = "value"
     )
-  
+
   d <-
     d[,
       .(
@@ -103,8 +103,8 @@ tidy_contact <- function(file) {
         last_name,
         first_name,
         age             = utils::type.convert(age, as.is = TRUE),
-        civilian_race   = recode(civilian_race, type = "race"),
-        civilian_gender = recode(civilian_gender, type = "gender"),
+        civilian_race   = str_consistency(civilian_race, type = "race"),
+        civilian_gender = str_consistency(civilian_gender, type = "gender"),
         civilian_age    = utils::type.convert(civilian_age, as.is = TRUE),
         type
       )
@@ -113,9 +113,9 @@ tidy_contact <- function(file) {
       birth_lower = year(dt) - age - 1
     )
     ][!is.na(dt)]
-  
+
   return(d)
-  
+
 }
 
 

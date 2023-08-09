@@ -48,8 +48,8 @@ tidy_arrest <- function(file_report, file_officer) {
 
   a[, `:=`(
     dt              = as.POSIXct(dt, format = "%d-%b-%Y %H:%M", tz = "GMT"),
-    civilian_race   = recode(civilian_race, type = "race"),
-    civilian_gender = recode(civilian_gender, type = "gender")
+    civilian_race   = str_consistency(civilian_race, type = "race"),
+    civilian_gender = str_consistency(civilian_gender, type = "gender")
   )]
 
   b <-

@@ -11,7 +11,7 @@
 #' @examples
 #'
 tidy_isr <- function(file) {
-  
+
   d <- fread(
     file,
     header       = TRUE,
@@ -68,7 +68,7 @@ tidy_isr <- function(file) {
       "vehicle_involved"
     )
   )
-  
+
   d <-
     dcast(
       melt(
@@ -79,17 +79,17 @@ tidy_isr <- function(file) {
       formula = ... ~ feature,
       value.var = "value"
     )
-  
+
   d[, `:=`(
     dt              = as.POSIXct(x = dt, format = "%d-%b-%Y %H:%M", tz = "GMT"),
     appointed       = fasttime::fastDate(appointed),
-    civilian_race   = recode(civilian_race,   type = "race"),
-    civilian_gender = recode(civilian_gender, type = "gender"),
+    civilian_race   = str_consistency(civilian_race,   type = "race"),
+    civilian_gender = str_consistency(civilian_gender, type = "gender"),
     birth           = utils::type.convert(birth, as.is = TRUE)
   )]
-  
+
   d <- d[!is.na(last_name)]
-  
+
   return(d)
-  
+
 }

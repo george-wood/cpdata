@@ -1,61 +1,63 @@
-#' Recode race and ethnicity or gender feature
+#' Ensure string consistency for race and ethnicity or gender
 #'
 #' @import data.table
 #'
 #' @param x Vector of race and ethnicity or gender values
-#' @param type Type of feature; currently accepts "race" or "gender"
+#' @param feature Name of feature; currently accepts "race" or "gender"
 #'
 #' @return Consistent values of race and ethnicity or gender feature
 #' @export
 #'
 #' @examples
 #' x <- c("M")
-#' recode(x, type = "gender")
-recode <- function(x, type = NULL) {
+#' str_consistency(x, type = "gender")
+str_consistency <- function(x, feature = NULL) {
 
-  if (is.null(type)) {
-    stop("No type specified. Must specify type, e.g. gender")
+  if (is.null(feature)) {
+    stop("No feature specified. Must specify feature, e.g. gender")
   }
 
   x <- tolower(x)
 
-  if (type == "race") {
+  if (feature == "race") {
     x <-
       data.table::fcase(
         x %in% c("asian/pacific islander",
                  "asian / pacific islander",
                  "native hawaiian or other pacific islander"),
-        "asian_pacific_islander",
-        x %in% c("black",
-                 "black hispanic"),
-        "black",
+        "ASIAN_PACIFIC_ISLANDER",
+        x %in% c("black"),
+        "BLACK",
+        x %in% c("black hispanic"),
+        "BLACK HISPANIC",
         x %in% c("hispanic",
-                 "white hispanic",
                  "spanish (do not use)"),
-        "hispanic",
+        "HISPANIC",
+        x %in% c("white hispanic"),
+        "WHITE HISPANIC",
         x %in% c("amer ind/alaskan native",
                  "amer indian / alaskan native"),
-        "indigenous",
+        "AMERICAN_INDIAN_ALASKAN_NATIVE",
         x %in% c("white"),
-        "white",
+        "WHITE",
         default = NA
       )
   }
 
-  if (type == "gender") {
+  if (feature == "gender") {
     x <-
       data.table::fcase(
         x %in% c("female",
                  "f"),
-        "female",
+        "FEMALE",
         x %in% c("male",
                  "m"),
-        "male",
+        "MALE",
         default = NA
       )
   }
 
-  return(x)
+  x
 
 }
 
