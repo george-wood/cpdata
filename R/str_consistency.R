@@ -25,7 +25,7 @@ str_consistency <- function(x, feature = NULL) {
         x %in% c("asian/pacific islander",
                  "asian / pacific islander",
                  "native hawaiian or other pacific islander"),
-        "ASIAN_PACIFIC_ISLANDER",
+        "ASIAN PACIFIC ISLANDER",
         x %in% c("black"),
         "BLACK",
         x %in% c("black hispanic"),
@@ -37,7 +37,7 @@ str_consistency <- function(x, feature = NULL) {
         "WHITE HISPANIC",
         x %in% c("amer ind/alaskan native",
                  "amer indian / alaskan native"),
-        "AMERICAN_INDIAN_ALASKAN_NATIVE",
+        "AMERICAN INDIAN ALASKAN NATIVE",
         x %in% c("white"),
         "WHITE",
         default = NA
